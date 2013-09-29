@@ -11,3 +11,6 @@ suites:
 - name: default
   run_list: ["recipe[new_relic]"]
   attributes: {}
+- name: mysql_monitor
+  run_list: ["recipe[new_relic::mysql_monitor]"]
+  attributes: {}
