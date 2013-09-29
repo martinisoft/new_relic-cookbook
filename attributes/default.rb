@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: new_relic
-# Recipe:: default
+# Attributes:: default
 #
 # Copyright (C) 2013 Aaron Kalin
 #
@@ -17,28 +17,4 @@
 # limitations under the License.
 #
 
-# Add the NewRelic apt repository
-apt_repository "newrelic" do
-  uri "http://apt.newrelic.com/debian/"
-  distribution "newrelic"
-  components [ "non-free" ]
-  keyserver "subkeys.pgp.net"
-  key "548C16BF"
-  action :add
-end
-
-# Install NewRelic server monitor agent
-package "newrelic-sysmond" do
-  action :install
-end
-
-# Configure the monitor
-
-service "newrelic-sysmond" do
-  supports status: true, restart: true, reload: true
-  if node["newrelic"]["enabled"]
-    action [ :enable, :start ]
-  else
-    action [ :disable, :stop ]
-  end
-end
+default["new_relic"]["enabled"] = true
