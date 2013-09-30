@@ -18,3 +18,6 @@
 #
 
 default["new_relic"]["enabled"] = true
+default["new_relic"]["license_key"] = nil
+default["new_relic"]["loglevel"] = "info"
+default["new_relic"]["logfile"] = "/var/log/newrelic/nrsysmond.log"

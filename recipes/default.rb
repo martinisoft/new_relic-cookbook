@@ -17,6 +17,19 @@
 # limitations under the License.
 #
 
+include_recipe "apt"
+
+license_key = node["new_relic"]["license_key"]
+if license_key.nil?
+  license_key = begin
+                  key_data = Chef::EncryptedDataBagItem.load("treehouse", "new_relic").to_hash
+                  key_data.delete('id')
+                  key_data["license_key"]
+                rescue => ex
+                  Chef::Application.fatal!("Cannot decrypt data bag! #{ex}")
+                end
+end
+
 # Add the NewRelic apt repository
 apt_repository "newrelic" do
   uri "http://apt.newrelic.com/debian/"
@@ -29,14 +42,31 @@ end
 
 # Install NewRelic server monitor agent
 package "newrelic-sysmond" do
-  action :install
+  action :upgrade
 end
 
 # Configure the monitor
+directory "/var/run/newrelic" do
+  owner "newrelic"
+  group "newrelic"
+end
+
+template "/etc/newrelic/nrsysmond.cfg" do
+  source "nrsysmond.cfg.erb"
+  owner "root"
+  group "newrelic"
+  mode "640"
+  variables(
+    :license_key => license_key,
+    :loglevel => node["new_relic"]["loglevel"],
+    :logfile => node["new_relic"]["logfile"]
+  )
+  notifies :restart, "service[newrelic-sysmond]" if node["new_relic"]["enabled"]
+end
 
 service "newrelic-sysmond" do
   supports status: true, restart: true, reload: true
-  if node["newrelic"]["enabled"]
+  if node["new_relic"]["enabled"]
     action [ :enable, :start ]
   else
     action [ :disable, :stop ]
