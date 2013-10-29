@@ -10,7 +10,11 @@ platforms:
 suites:
 - name: default
   run_list: ["recipe[new_relic]"]
+  data_bag_path: test/integration/data_bags
+  encrypted_data_bag_secret_key_path: test/integration/data_bags/encrypted_data_bag_secret
   attributes: {}
 - name: mysql_monitor
   run_list: ["recipe[new_relic::mysql_monitor]"]
+  data_bag_path: test/integration/data_bags
+  encrypted_data_bag_secret_key_path: test/integration/data_bags/encrypted_data_bag_secret
   attributes: {}

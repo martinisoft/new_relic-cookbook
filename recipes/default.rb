@@ -18,7 +18,19 @@
 #
 
 include_recipe "apt"
-include_recipe "new_relic::_license_data"
+
+license_key = node["new_relic"]["license_key"]
+if license_key.nil?
+  license_key = begin
+                  key_data = Chef::EncryptedDataBagItem.load(node["new_relic"]["data_bag_name"], "new_relic_env").to_hash
+                  key_data.delete('id')
+                  Chef::Log.info("License: #{key_data['license_key']}")
+                  key_data["license_key"]
+                rescue => ex
+                  Chef::Application.fatal!("Cannot decrypt data bag! #{ex}")
+                end
+end
+license_key
 
 # Add the NewRelic apt repository
 apt_repository "newrelic" do
@@ -40,6 +52,8 @@ directory "/var/run/newrelic" do
   owner "newrelic"
   group "newrelic"
 end
+
+Chef::Log.info("License Key: #{license_key}")
 
 template "/etc/newrelic/nrsysmond.cfg" do
   source "nrsysmond.cfg.erb"
