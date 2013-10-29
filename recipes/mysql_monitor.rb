@@ -20,4 +20,12 @@
 include_recipe "apt"
 include_recipe "new_relic::_license_data"
 include_recipe "java::openjdk"
-include_recipe "user"
+
+# Setup new_relic user
+user "new_relic" do
+  comment "New Relic Plugin Agent"
+  shell "/bin/bash"
+  home "/srv/new_relic"
+  manage_home true
+end
+
