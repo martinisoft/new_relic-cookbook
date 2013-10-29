@@ -54,6 +54,7 @@ knife solo data bag edit martinisoftware new_relic --secret-file test/integratio
 # Attributes
 
 * `default["new_relic"]["enabled"]` - Is the server agent enabled?
+* `default["new_relic"]["data_bag_name"]` - The data bag that contains the "new\_relic\_env" item, default is "new_relic"
 * `default["new_relic"]["license_key"]` - Your NewRelic license key
 * `default["new_relic"]["loglevel"]` - Log level, default is "info"
 * `default["new_relic"]["logfile"]` - Log location, default is "/var/log/newrelic/nrsysmond.log"
