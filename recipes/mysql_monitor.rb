@@ -18,7 +18,6 @@
 #
 
 include_recipe "apt"
-include_recipe "new_relic::_license_data"
 include_recipe "java::openjdk"
 
 # Setup new_relic user
