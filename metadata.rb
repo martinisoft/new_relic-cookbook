@@ -1,6 +1,6 @@
 name             "new_relic"
 maintainer       "Aaron Kalin"
-maintainer_email "aaron@teamtreehouse.com"
+maintainer_email "akalin@martinisoftware.com"
 license          "Apache 2.0"
 description      "Installs and configures the New Relic Agents"
 long_description IO.read(File.join(File.dirname(__FILE__), "README.md"))
