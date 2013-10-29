@@ -17,4 +17,7 @@
 # limitations under the License.
 #
 
+include_recipe "apt"
+include_recipe "new_relic::_license_data"
 include_recipe "java::openjdk"
+include_recipe "user"

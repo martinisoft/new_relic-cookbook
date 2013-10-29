@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: new_relic
-# Attributes:: default
+# Recipe:: _license_data
 #
 # Copyright (C) 2013 Aaron Kalin
 #
@@ -17,8 +17,13 @@
 # limitations under the License.
 #
 
-default["new_relic"]["enabled"] = true
-default["new_relic"]["license_key"] = nil
-default["new_relic"]["data_bag_name"] = "new_relic"
-default["new_relic"]["loglevel"] = "info"
-default["new_relic"]["logfile"] = "/var/log/newrelic/nrsysmond.log"
+license_key = node["new_relic"]["license_key"]
+if license_key.nil?
+  license_key = begin
+                  key_data = Chef::EncryptedDataBagItem.load(node["new_relic"]["data_bag_name"], "new_relic_env").to_hash
+                  key_data.delete('id')
+                  key_data["license_key"]
+                rescue => ex
+                  Chef::Application.fatal!("Cannot decrypt data bag! #{ex}")
+                end
+end

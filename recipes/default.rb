@@ -18,17 +18,7 @@
 #
 
 include_recipe "apt"
-
-license_key = node["new_relic"]["license_key"]
-if license_key.nil?
-  license_key = begin
-                  key_data = Chef::EncryptedDataBagItem.load("treehouse", "new_relic").to_hash
-                  key_data.delete('id')
-                  key_data["license_key"]
-                rescue => ex
-                  Chef::Application.fatal!("Cannot decrypt data bag! #{ex}")
-                end
-end
+include_recipe "new_relic::_license_data"
 
 # Add the NewRelic apt repository
 apt_repository "newrelic" do
